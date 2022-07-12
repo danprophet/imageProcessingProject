@@ -3,20 +3,48 @@ import numpy as np
 import skimage
 
 # test patterns:
-test_image = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 1, 0, 0, 0, 0, 0],
-                       [0, 1, 1, 1, 0, 0, 0, 0],
-                       [0, 0, 1, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0]])
+test_image = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                       [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                       [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+                       [0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+                       [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+                       [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
 test_se = np.array([[0, 1, 0],
                     [1, 1, 1],
                     [0, 1, 0]])
 
+test_se = np.array([[0, 1, 0],
+                    [1, 1, 1],
+                    [0, 1, 0]])
+19 ,11
+structure_element_number_2 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+                                       [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                                       [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0],
+                                       [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0],
+                                       [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+                                       [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+                                       [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+                                       [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+                                       [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+                                       [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+                                       [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+                                       [0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+                                       [0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+                                       [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                                       [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+                                       ])
 # Image threshold
+
+
 def get_thershold_to_image(image, thrshold = 0.7):
     # blur the image to denoise
     blurred_image = skimage.filters.gaussian(image, sigma=1.0)
@@ -31,12 +59,50 @@ def get_thershold_to_image(image, thrshold = 0.7):
 
     return binary_mask
 
+
 def get_thershold(image, thrshold=0.7):
     # blur the image to denoise
     blurred_image = skimage.filters.gaussian(image, sigma=1.0)
     binary_mask = blurred_image > thrshold
     binary_mask = binary_mask.astype(int)
     return binary_mask
+
+
+def binary_image_to_255(image):
+    image[image > 0] = 255
+    return image
+
+
+def opposite_threshold(image):
+    """This function gets threshold image and reverts it"""
+    rows, cols = image.shape
+    return_image = np.zeros(shape=(rows, cols), dtype=np.uint8)
+    for row in range(rows):
+        for col in range(cols):
+            if image[row,col] == 1:
+                return_image[row, col] = 0
+            elif image[row, col] == 0:
+                return_image[row, col] = 1
+    return return_image
+
+
+def hit_and_miss(hit, miss):
+    """This function executes AND with 2 hit and miss threshold images"""
+    row_hits, cols_hit = hit.shape
+    row_miss, cols_miss = miss.shape
+
+    if row_miss != row_hits or cols_hit != cols_miss:  # matrix does not match
+        return False
+    else:
+        rows, cols = hit.shape
+        hit_and_miss_result = np.zeros(shape=(rows, cols), dtype=np.uint8)
+
+        for row in range(rows):
+            for col in range(cols):
+                if hit[row, col] == 1 and miss[row, col] == 1:
+                    hit_and_miss_result[row, col] = 1
+
+        return hit_and_miss_result
 
 
 def morphological_operators(binary_image, se, se_center=[0, 0]):
@@ -47,8 +113,6 @@ def morphological_operators(binary_image, se, se_center=[0, 0]):
     """
     rows, cols = binary_image.shape
     se_rows, se_cols = se.shape
-    center_value = se[se_center[0], se_center[1]]
-    # result = np.zeros([rows+(2*se_rows), cols+(2*se_cols)], dtype=np.bool)  # result with pad
     result = np.zeros([rows, cols], dtype=np.uint8)  # result with pad
 
     se_forward_distance_row = ((se_rows - 1) - se_center[0])
@@ -61,7 +125,7 @@ def morphological_operators(binary_image, se, se_center=[0, 0]):
             if (i-se_center[0] < 0) and (j-se_center[1] < 0):  # top left corner v v
                 se_col_diff = abs(j - se_center[1])
                 se_row_diff = abs(i - se_center[0])
-                sliced_se = se[se_row_diff:, se_row_diff:]
+                sliced_se = se[se_row_diff:, se_col_diff:]
                 sliced_binary = binary_image[:se_rows - se_row_diff, :se_cols - se_col_diff]
 
             elif (i+se_forward_distance_row >= rows) and (j+se_forward_distance_col >= cols):  # bottom right corner v v
@@ -73,32 +137,37 @@ def morphological_operators(binary_image, se, se_center=[0, 0]):
             elif (i-se_center[0] < 0) and (j + se_forward_distance_col >= cols):  # top right corner v v
                 se_col_diff = j + se_forward_distance_col - (cols-1)  # col se pixels out of border
                 se_row_diff = abs(i-se_center[0])  # exact amount of out se pixels
-                sliced_se = se[se_row_diff:, :se_cols - se_col_diff - 1]
+                real_forward_aviable_pixels = se_cols - se_col_diff - 1  # amount of pixels until out of border
+                sliced_se = se[se_row_diff:, :real_forward_aviable_pixels if real_forward_aviable_pixels > 0 else 1]
                 sliced_binary = binary_image[:se_rows - se_row_diff, j-se_center[1]:]
 
             elif (i+se_forward_distance_row >= rows) and (j-se_center[1] < 0):  # bottom left corner v v
                 se_col_diff = abs(j-se_center[1])  # exact amount of out se pixels
+                # se_row_diff = abs(i-se_center[0])
+                se_row_diff = i + se_forward_distance_row - (rows - 1)  # row se pixels out of border
                 sliced_se = se[:se_rows - se_row_diff, se_col_diff:]
-                sliced_binary = binary_image[i-se_center[0]:, :se_cols-se_center[1]]
+                sliced_binary = binary_image[i-se_center[0]:, :se_cols - se_col_diff]
 
             # 2. just borders
             elif i-se_center[0] < 0:  # only rows upper part
-                sliced_se = se[se_center[0]:, :]
-                sliced_binary = binary_image[i:se_rows - se_center[0], j - se_center[1]:j + se_forward_distance_col+1]
+                se_row_diff = abs(i - se_center[0])  # exact amount of out se pixels
+                sliced_se = se[se_row_diff:, :]
+                sliced_binary = binary_image[:se_rows - se_row_diff, j - se_center[1]:j + se_forward_distance_col+1]
 
             elif j-se_center[1] < 0:  # only cols left part
-                sliced_se = se[:, se_center[1]:]
-                sliced_binary = binary_image[i - se_center[0]:i + se_forward_distance_row +1, j:se_cols - se_center[1]]
+                se_col_diff = abs(j - se_center[1])
+                sliced_se = se[:, se_col_diff:]
+                sliced_binary = binary_image[i - se_center[0]:i + se_forward_distance_row + 1, :se_cols - se_col_diff]
 
             elif i+se_forward_distance_row >= rows:  # only rows bottom part
                 se_row_diff = i + se_forward_distance_row - (rows-1)  # row se pixels out of border
-                sliced_se = se[se_center[0]:se_rows - se_row_diff, :]
-                sliced_binary = binary_image[i:, j - se_center[1]:j + se_forward_distance_col+1]
+                sliced_se = se[:se_rows - se_row_diff, :]
+                sliced_binary = binary_image[i - se_center[0]:, j - se_center[1]:j + se_forward_distance_col+1]
 
             elif j + se_forward_distance_col >= cols:  # only cols right part
                 se_col_diff = j + se_forward_distance_col - (cols-1)  # col se pixels out of border
-                sliced_se = se[:, :se_cols - se_col_diff+1]
-                sliced_binary = binary_image[i - se_center[0]:i + se_forward_distance_row +1, j:]
+                sliced_se = se[:, :se_cols - se_col_diff]
+                sliced_binary = binary_image[i - se_center[0]:i + se_forward_distance_row +1, j-se_center[1]:]
 
             else:  # middle zone in the matrix
                 sliced_se = se[:, :]
@@ -106,16 +175,17 @@ def morphological_operators(binary_image, se, se_center=[0, 0]):
 
             # run over the 2 matrix and check match:
             sliced_se_rows, sliced_se_cols = sliced_se.shape
-            noMatchFlag = False  # indicates if SE matches current scanned zone
+            matchFlag = True  # indicates if SE matches current scanned zone
             for se_sliced_row in range(sliced_se_rows):
                 for se_sliced_col in range(sliced_se_cols):
-                    if sliced_binary[se_sliced_row, se_sliced_col] == 1 and sliced_se[se_sliced_row, se_sliced_col] != 1:
-                        noMatchFlag = True
-                        break
+                    if sliced_se[se_sliced_row, se_sliced_col] == 1 and sliced_binary[se_sliced_row, se_sliced_col] != 1:
+                        matchFlag = False
+                if not matchFlag:
+                    break
 
-            if noMatchFlag:
-                result[i, j] = 0  # no match
-            else:
+            if matchFlag:
                 result[i, j] = 1  # match
+            else:
+                result[i, j] = 0  # no match
 
     return result

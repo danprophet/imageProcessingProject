@@ -24,11 +24,12 @@ work_image = cv2.imread('image_resources/sample.png', 0) # open as gray picture
 
 
 # 3. -------- Verification --------
-# result_threshold = verification.get_thershold_to_image(work_image)  # extract to image file
-# cv2.imwrite('image_resources/result_filter/scaled_image_thresh_{}.png'.format(time.time()), result_threshold)
+result_threshold = verification.get_thershold_to_image(work_image)  # extract to image file
+cv2.imwrite('image_resources/result_filter/scaled_image_thresh_{}.png'.format(time.time()), result_threshold)
 result_target = verification.morphological_operators(verification.test_image,
                                                      verification.test_se,
                                                      [1,1])
+result_target = verification.binary_image_to_255(result_target)  # set all 1 to 255
 cv2.imwrite('image_resources/result_filter/found_{}.png'.format(time.time()), result_target)
 
 
