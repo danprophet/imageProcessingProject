@@ -20,7 +20,7 @@ test_se = np.array([[0, 1, 0],
 test_se = np.array([[0, 1, 0],
                     [1, 1, 1],
                     [0, 1, 0]])
-19 ,11
+
 structure_element_number_2 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                        [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
                                        [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
@@ -40,8 +40,51 @@ structure_element_number_2 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
                                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
                                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-
                                        ])
+
+structure_element_number_9 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                       ])
+
+structure_element_number_general_revert = np.array([
+                                       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                                       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
 # Image threshold
 
 
@@ -69,8 +112,15 @@ def get_thershold(image, thrshold=0.7):
 
 
 def binary_image_to_255(image):
-    image[image > 0] = 255
-    return image
+    rows,cols = image.shape
+    return_image = np.zeros(shape=(rows, cols), dtype=np.uint8)
+    for row in range(rows):
+        for col in range(cols):
+            if image[row,col] > 0:
+                return_image[row,col] = 255
+
+    # image[image > 0] = 255
+    return return_image
 
 
 def opposite_threshold(image):
@@ -103,6 +153,33 @@ def hit_and_miss(hit, miss):
                     hit_and_miss_result[row, col] = 1
 
         return hit_and_miss_result
+
+
+def print_target_hit_miss_result(hit_and_miss, image):
+    """
+    This function gets hit and miss result and original image, and prints borders around targets
+    Returns image copy with targets
+    """
+    rows, cols = hit_and_miss.shape
+    image_rows, image_cols = image.shape
+    image_copy = image.copy()
+    # hit_and_miss_result = np.zeros(shape=(image_rows, image_cols), dtype=np.uint8)
+
+    for row in range(rows):
+        for col in range(cols):
+            if hit_and_miss[row,col] == 1:
+
+                # print border around target in white
+                try:  # ignore close to border exceptions
+                    for i in range(5):
+                        image_copy[row+i, col+5] = 255
+                        image_copy[row-i, col-5] = 255
+                        image_copy[row+5, col+i] = 255
+                        image_copy[row-5, col-i] = 255
+                except Exception as e:
+                    pass
+
+    return image_copy
 
 
 def morphological_operators(binary_image, se, se_center=[0, 0]):
