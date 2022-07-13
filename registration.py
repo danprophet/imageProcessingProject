@@ -101,7 +101,7 @@ def implement_geometric_transformation(image, transformation, transformation_nam
             if transformation_name == 'transformation_translation':
                 imageCanvas[int(i + transformation[0, 2]), int(j + transformation[1,2])] = current_pixel_info
             elif transformation_name == "transformation_rotation":
-                result_multiplication = current_coordinates @ transformation # result 3x3 matrix
+                result_multiplication = current_coordinates @ transformation # result 1x3 matrix
                 if result_multiplication[0] < 0 or result_multiplication[1] < 0:  # out of bounds
                     continue
                 else:

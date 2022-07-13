@@ -44,7 +44,6 @@ work_miss_to_255 = verification.binary_image_to_255(work_miss)  # miss thresh to
 cv2.imwrite('image_output/morpological_operators/hit_and_miss/work_miss_to_255_{}.png'.format(time.time()), work_miss_to_255)  # to file
 
 work_hit_and_miss = verification.hit_and_miss(work_hit, work_miss)  # AND operation between hit and miss
-
 work_hit_and_miss_to_255 = verification.binary_image_to_255(work_hit_and_miss)  # hit and miss to 255
 cv2.imwrite('image_output/morpological_operators/hit_and_miss/work_hit_and_miss_to_255_{}.png'.format(time.time()), work_hit_and_miss_to_255)  # to file
 
