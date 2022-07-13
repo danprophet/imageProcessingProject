@@ -190,6 +190,65 @@ def print_target_hit_miss_result(hit_and_miss, image):
     return image_copy
 
 
+def dilation_implemented_on_image(binary_threshold, image, se, se_center):
+    """
+    This function smears pixels as the structure element according to binary threshold over the image
+    binary_threshold - threshold of give image.
+    image - give image
+    se - structure element
+    se_center - structure element center coordinates
+    """
+    image_row, image_col = image.shape
+    se_row, se_col = se.shape
+
+    image_copy = image.copy()
+
+    for row in range(image_row):
+        for col in range(image_col):
+            current_value = image[row,col]  # save value for smearing
+
+            if binary_threshold[row, col] == 1:  # smear here
+                for current_se_row in range(se_row):
+                    for current_se_col in range(se_col):
+                        try:
+                            # find i:
+                            if current_se_row < se_center[0]:
+                                current_i = row - se_center[0]
+                            elif current_se_row > se_center[0]:
+                                current_i = row + se_center[0]
+                            else:  # in center
+                                current_i = row
+                            # find j:
+                            if current_se_col < se_center[1]:
+                                current_j = col - se_center[1]
+                                pass
+                            elif current_se_col > se_center[1]:
+                                current_j = col + se_center[1]
+                                pass
+                            else:
+                                current_j = col
+                            image_copy[current_i, current_j] = current_value
+
+                        except Exception as e:  # out of borders
+                            pass
+
+    return image_copy
+
+
+def print_pattern_on_image(binary, image, pattern):
+    """This function print pattern over an image in positions where binary value is 1"""
+    image_row, image_col = image.shape
+    pattern_row, pattern_col = pattern.shape
+    image_copy = image.copy()
+
+    for row in range(image_row):
+        for col in range(image_col):
+            if binary[row, col] == 1:  # print here
+                image_copy[row, col] = pattern[row % pattern_row, col % pattern_col]
+
+    return image_copy
+
+
 def morphological_operators(mode, binary_image, se, se_center=[0, 0]):
     """This function executes the morphological_operators according to the passed stracture element se.
     se_center = [x_pos, y_pos] coordinates of the se
@@ -305,3 +364,4 @@ def morphological_operators(mode, binary_image, se, se_center=[0, 0]):
                                     pass
 
     return result
+
