@@ -3,8 +3,8 @@ import numpy as np
 
 # ----- set filters: -----
 # set sharpein Filter:
-shapreningFilter = np.array([[-1, -1,-1],[-1,8,-1],[-1,-1,-1]]) # Laplacian, image is the function
-# shapreningFilter = np.array([[0,-1,0],[-1,4,-1],[0,-1,0]]) # Laplacian, image is the function
+shapreningFilter = np.array([[-1, -1,-1],[-1,8,-1],[-1,-1,-1]]) # Laplacian
+# shapreningFilter = np.array([[0,-1,0],[-1,4,-1],[0,-1,0]]) # Laplacian
 # set smooth Filter:
 smoothFilter = np.array([[1,1,1],[1,1,1],[1,1,1]]) # Average of the around 1/9 * sums
 
