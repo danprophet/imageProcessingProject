@@ -10,7 +10,7 @@ work_image = cv2.imread('image_resources/sample.png', 0) # open as gray picture
 # slice
 work_image = work_image[450:600, 75:300]
 
-work_image_threshold = verification.get_thershold(work_image)  # extract to image file
+work_image_threshold = verification.get_thershold(work_image, thrshold=0.8)  # extract to image file
 print(work_image_threshold)
 work_image_threshold_to_255 = verification.binary_image_to_255(work_image_threshold)
 cv2.imwrite('image_output/morpological_operators/work_image_threshold_to_255_{}.png'.format(time.time()), work_image_threshold_to_255)
