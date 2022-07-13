@@ -1,9 +1,8 @@
-"""This module handles registration"""
+"""This module handles Registration"""
 import numpy as np
 
 #################################
-# Geometric Transformation:
-
+# Geometric Transformation dictionary:
 transformations = {
     "transformation_identity": np.array([
         [1, 0, 0],
@@ -59,10 +58,16 @@ transformations = {
 
 
 def implement_geometric_transformation(image, transformation, transformation_name):
+    """
+    This function implements geometric transformation over a given image
+    :param image: given image to execute over the geometric transformation
+    :param transformation: given geometric transformation
+    :param transformation_name: passed transformation according to transformations dictionary in this module
+    :return: imageCanvas - image after geometric transformation
+    """
     original_image_height, original_image_width = image.shape  # save original image width and height
     new_image_height, new_image_width = image.shape # size for the destination canvas
 
-    # TODO: add here code to determine filter to set imageCanvas size
     # determine size:
     if transformation_name == "transformation_translation":
         new_image_height = int(original_image_height + transformation[0, 2])

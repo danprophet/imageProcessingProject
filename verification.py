@@ -1,8 +1,8 @@
-"""This module handles verification morphological operations"""
+"""This module handles verification Morphological Operators"""
 import numpy as np
 import skimage
 
-# test patterns:
+# test patterns to be used in the program:
 test_image = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
@@ -47,7 +47,7 @@ structure_element_number_2 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
                                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
                                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                       ])
+                                       ])  # represent number '2'
 
 structure_element_number_1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -69,7 +69,7 @@ structure_element_number_1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
                                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                                       ])
+                                       ])  # represent vertical line, good for finding number '1'
 
 
 structure_element_number_general_revert = np.array([
@@ -92,12 +92,19 @@ structure_element_number_general_revert = np.array([
                                        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                                        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                                        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                                       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
-# Image threshold
+                                       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])  # opposite threshold to isolate numbers
 
 
+## Module Functions: ##
 def get_thershold_to_image(image, thrshold = 0.7):
-    # blur the image to denoise
+    """
+    This function gets an image, and threshold value - if threshold value is not set, the default is 0.7
+    The function executes threshold over given image and returns 0 to 255 values mask of the original image after threshold,
+    good for to file writing.
+    :param image: given image
+    :param thrshold: threshold value
+    :return: binary_mask
+    """
     blurred_image = skimage.filters.gaussian(image, sigma=1.0)
     binary_mask = blurred_image > thrshold
     binary_mask = binary_mask.astype(int)
@@ -112,7 +119,13 @@ def get_thershold_to_image(image, thrshold = 0.7):
 
 
 def get_thershold(image, thrshold=0.7):
-    # blur the image to denoise
+    """
+    This function gets an image, and threshold value - if threshold value is not set, the default is 0.7
+    The function executes threshold over given image and returns binary mask of the original image after threshold
+    :param image: given image
+    :param thrshold: threshold value
+    :return: binary_mask
+    """
     blurred_image = skimage.filters.gaussian(image, sigma=1.0)
     binary_mask = blurred_image > thrshold
     binary_mask = binary_mask.astype(int)
@@ -120,6 +133,11 @@ def get_thershold(image, thrshold=0.7):
 
 
 def binary_image_to_255(image):
+    """
+    This function gets binary image and returns the image with 0 to 255 values
+    :param image:
+    :return: return_image - 0 to 255 values image
+    """
     rows,cols = image.shape
     return_image = np.zeros(shape=(rows, cols), dtype=np.uint8)
     for row in range(rows):
@@ -127,12 +145,15 @@ def binary_image_to_255(image):
             if image[row,col] > 0:
                 return_image[row,col] = 255
 
-    # image[image > 0] = 255
     return return_image
 
 
 def opposite_threshold(image):
-    """This function gets threshold image and reverts it"""
+    """
+    This function gets threshold image and reverts it - 0 instead or 1 and vice versa
+    :param image:
+    :return: return_image - binary opposite of given image
+    """
     rows, cols = image.shape
     return_image = np.zeros(shape=(rows, cols), dtype=np.uint8)
     for row in range(rows):
@@ -145,7 +166,12 @@ def opposite_threshold(image):
 
 
 def hit_and_miss(hit, miss):
-    """This function executes AND with 2 hit and miss threshold images"""
+    """
+    This function executes AND operation with 2 hit and miss threshold images
+    :param hit: binary hit map
+    :param miss: binary miss map
+    :return: hit_and_miss_result - binary hit AND miss after AND operation
+    """
     row_hits, cols_hit = hit.shape
     row_miss, cols_miss = miss.shape
 
@@ -165,8 +191,11 @@ def hit_and_miss(hit, miss):
 
 def print_target_hit_miss_result(hit_and_miss, image):
     """
-    This function gets hit and miss result and original image, and prints borders around targets
+    This function gets hit and miss map result and original image, and prints borders around targets
     Returns image copy with targets
+    :param hit_and_miss: binary hit and miss map
+    :param image: given image 0 to 255 values
+    :return: image_copy - image with targets around targets
     """
     rows, cols = hit_and_miss.shape
     image_rows, image_cols = image.shape
@@ -193,10 +222,11 @@ def print_target_hit_miss_result(hit_and_miss, image):
 def dilation_implemented_on_image(binary_threshold, image, se, se_center):
     """
     This function smears pixels as the structure element according to binary threshold over the image
-    binary_threshold - threshold of give image.
-    image - give image
-    se - structure element
-    se_center - structure element center coordinates
+    :param binary_threshold: threshold of give image.
+    :param image: give image
+    :param se: structure element
+    :param se_center: structure element center coordinates
+    :return:
     """
     image_row, image_col = image.shape
     se_row, se_col = se.shape
@@ -236,7 +266,14 @@ def dilation_implemented_on_image(binary_threshold, image, se, se_center):
 
 
 def print_pattern_on_image(binary, image, pattern):
-    """This function print pattern over an image in positions where binary value is 1"""
+    """
+    This function gets binary map, image 0 to 255, and pattern 0 to 255, and prints pattern over the image at positions
+    where map is 1
+    :param binary: binary map o or 1
+    :param image: given image 0 to 255
+    :param pattern: given pattern 0 to 255
+    :return: image_copy - image with pattern
+    """
     image_row, image_col = image.shape
     pattern_row, pattern_col = pattern.shape
     image_copy = image.copy()
@@ -250,10 +287,13 @@ def print_pattern_on_image(binary, image, pattern):
 
 
 def morphological_operators(mode, binary_image, se, se_center=[0, 0]):
-    """This function executes the morphological_operators according to the passed stracture element se.
-    se_center = [x_pos, y_pos] coordinates of the se
-    se = stracture element
-    binary_image = passed binary image (thresholded)
+    """
+    This function executes the morphological_operators according to the passed Structure Element se.
+    :param mode: hit_and_miss or dilation
+    :param binary_image: passed binary image (thresholded)
+    :param se: Structure Element
+    :param se_center: [x_pos, y_pos] coordinates of the Structure Element
+    :return: result - binary map after execution of Structure Element
     """
     rows, cols = binary_image.shape
     se_rows, se_cols = se.shape

@@ -1,10 +1,9 @@
-"""This module handles pre processing"""
+"""This module handles PreProcessing"""
 import numpy as np
-import cv2
 
 # ----- set filters: -----
 # set sharpein Filter:
-shapreningFilter = np.array([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]]) # Laplacian, image is the function
+shapreningFilter = np.array([[-1, -1,-1],[-1,8,-1],[-1,-1,-1]]) # Laplacian, image is the function
 # shapreningFilter = np.array([[0,-1,0],[-1,4,-1],[0,-1,0]]) # Laplacian, image is the function
 # set smooth Filter:
 smoothFilter = np.array([[1,1,1],[1,1,1],[1,1,1]]) # Average of the around 1/9 * sums
@@ -12,7 +11,12 @@ smoothFilter = np.array([[1,1,1],[1,1,1],[1,1,1]]) # Average of the around 1/9 *
 
 # image filtering function:
 def my_imfilter (s, filter):
-    """This function gets GRAYSCALE image s and filter, and returns image after filter implementation"""
+    """
+    This function gets GRAYSCALE image s and filter, and returns image after filter implementation
+    :param s: given image
+    :param filter: given filter
+    :return: resultImage or resultFilter, according to given filter
+    """
     filterSizeRows, filterSizeCols = filter.shape
     imageSizeRows, imageSizeCols = s.shape
 
