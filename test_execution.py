@@ -17,7 +17,7 @@ cv2.imwrite('image_output/morpological_operators/work_image_threshold_to_255_{}.
 
 # reverted_threshold = verification.opposite_threshold(result_threshold)
 work_hit = verification.morphological_operators(work_image_threshold,
-                                                verification.structure_element_number_9,
+                                                verification.structure_element_eifel,
                                                 [10 ,5])
 work_hit_to_255 = verification.binary_image_to_255(work_hit)
 cv2.imwrite('image_output/morpological_operators/work_hit_to_255_{}.png'.format(time.time()), work_hit_to_255)
